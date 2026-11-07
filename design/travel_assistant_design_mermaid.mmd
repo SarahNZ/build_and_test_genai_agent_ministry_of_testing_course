@@ -8,5 +8,21 @@ sequenceDiagram
     User->>UI: "Book flight to Liverpool next Friday under $500"
     UI->>API: POST /chat
     API->>Agent: route(message)
-    Agent->>LLM: (interpret request)
-    Agent->>Tool: search flights
+    Agent->>LLM: "User wants to book a flight<br/>to Liverpool next Friday<br/>under $500"
+    LLM->>Agent: "Use FlightTool for Liverpool<br/>next Friday under $500"
+    Agent->>Tool: get_flight("Liverpool", "Friday", "500")
+    Tool->>Agent: {price: 499, airline: "BA", time: 202611130600, origin: "Birmingham", destination: "Liverpool", status: available}
+    API->>UI: "JSON response"
+    UI->>User: "Display formatted answer"
+    User->>UI: "Book it with name Example User and credit card number 12345678"
+    UI->>API: POST /chat
+    API->>Agent: route(message)
+    Agent->>LLM: "User wants to book the flight<br/>{passenger: ExampleUser,<br/>creditcardnumber: "12345678",<br/>price: 499, airline: "BA",<br/>time: 202611130600,<br/>origin: "Birmingham",<br/>destination: "Liverpool",<br/>status: available}"
+    API->>UI: "JSON response"
+    LLM->>Agent: "Use FlightTool for Liverpool<br/>next Friday under $500"
+    Agent->>Tool: book_flight(price: 499, airline: "BA", time: 202611130600, origin: "Birmingham", destination: "Liverpool")
+    Tool->>Agent: {price: 499, airline: BA, status: available}
+    API->>UI: "JSON response"
+    UI->>User: "Display formatted answer"
+
+
