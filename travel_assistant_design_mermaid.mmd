@@ -1,0 +1,12 @@
+sequenceDiagram
+    participant User
+    participant UI
+    participant API
+    participant Agent
+    participant LLM
+    participant Tool as Flight Search Tool
+    User->>UI: "Book flight to Liverpool next Friday under $500"
+    UI->>API: POST /chat
+    API->>Agent: route(message)
+    Agent->>LLM: (interpret request)
+    Agent->>Tool: search flights
